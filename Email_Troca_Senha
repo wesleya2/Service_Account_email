@@ -1,0 +1,40 @@
+#Bibliotecas
+import pandas as pd
+from datetime import datetime,timedelta, date
+import win32com.client as win32
+
+#date
+data = datetime.now()
+br_date = data.strftime('%d/%m/%Y')
+#Report date considering +15 days
+Date_required = date.today() + timedelta(days=15)
+br_date_email = Date_required.strftime('%d/%m/%Y')
+#Base
+base = pd.read_excel(r'Envio_Email_TrocaSenha\Controle_Service_Account_Tratado.xlsx')
+base = base[base['Pwd Next Set'] == br_date]
+for i, conta in enumerate(base):
+    account_name = base.iloc[i]['Account Name']
+    pcontact = base.iloc[i]['Primary Contact E-mail']
+    scontact = base.iloc[i]['Secondary Contact E-mail']
+    Pwd = base.iloc[i]['Pwd Next Set']
+    Acc_Class = base.iloc[i]['Account Classification']
+    outlook = win32.Dispatch('outlook.application')
+    email = outlook.CreateItem(0)
+    email.To = f"{pcontact};{scontact}"
+    email.CC = 'luizlau@deloitte.com;fbom@deloitte.com'
+    email.Subject = 'Troca Senha - Service Account'
+    email.Body = f"""Prezad(x)s, boa tarde.
+
+Conforme comunicado enviado previamente, precisamos realizar a alteração de senha da conta de serviço abaixo, previamente classificada como: {Acc_Class}, até o dia {br_date_email}.
+Service Account: atrame\ {account_name}
+    
+Nos informe, por gentileza, o dia e horário possível para alteração, não ultrapassando a data limite informada acima.
+
+Desde já agradeço.
+
+Att,
+
+"""
+    anexo = r'\Envio_Email_TrocaSenha\Processo de Gerenciamento de Senhas de Contas De Serviço (Não Humanas).msg'
+    email.Attachments.Add(anexo)
+    email.Send()
