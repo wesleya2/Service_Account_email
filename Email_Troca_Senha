@@ -21,12 +21,12 @@ for i, conta in enumerate(base):
     outlook = win32.Dispatch('outlook.application')
     email = outlook.CreateItem(0)
     email.To = f"{pcontact};{scontact}"
-    email.CC = 'luizlau@deloitte.com;fbom@deloitte.com'
+    email.CC = 'email@dominio.com'
     email.Subject = 'Troca Senha - Service Account'
     email.Body = f"""Prezad(x)s, boa tarde.
 
 Conforme comunicado enviado previamente, precisamos realizar a alteração de senha da conta de serviço abaixo, previamente classificada como: {Acc_Class}, até o dia {br_date_email}.
-Service Account: atrame\ {account_name}
+Service Account: dominio\ {account_name}
     
 Nos informe, por gentileza, o dia e horário possível para alteração, não ultrapassando a data limite informada acima.
 
